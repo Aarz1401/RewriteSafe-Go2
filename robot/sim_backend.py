@@ -8,6 +8,7 @@ import numpy as np
 from sim.scene import build
 from verifier.core import Verifier
 
+GOAL_MARKER = "goal_zone"  # flat floor marker; not a physical object
 DT = 0.01  # MuJoCo timestep (s); also the verifier's control-step period.
 
 
@@ -37,6 +38,7 @@ class SimBackend:
 
     def __init__(self, task: dict, config: SimConfig | None = None, video: bool = False) -> None:
         self.task, self.config = task, config or SimConfig()
+        self._object_names = tuple(o["name"] for o in task["objects"])
         self._model = build(task)
         self._data = mujoco.MjData(self._model)
         self._data.qpos[:3] = task["start"]
@@ -58,16 +60,33 @@ class SimBackend:
     def get_robot_pose(self) -> tuple[float, float, float]:
         return tuple(float(v) for v in self._data.qpos[:3])
 
+    def _marker(self) -> dict | None:
+        """The flat goal marker (tape/AprilTag on the floor), if the task has one."""
+        goal = self.task["goal"]
+        if not goal.get("marker"):
+            return None
+        return {"pose": tuple(goal["pose"]), "radius": goal.get("radius", 0.12)}
+
     def get_object_pose(self, name: str) -> tuple[float, float, float]:
+        marker = self._marker()
+        if name == GOAL_MARKER and marker:
+            return tuple(float(v) for v in marker["pose"])
+        if name not in self._object_names:
+            raise KeyError(f"unknown object {name!r}")
         body = self._data.body(name)
         mat = body.xmat.reshape(3, 3)
         return float(body.xpos[0]), float(body.xpos[1]), math.atan2(mat[1, 0], mat[0, 0])
 
     def get_object_size(self, name: str) -> tuple[float, float, float]:
+        marker = self._marker()
+        if name == GOAL_MARKER and marker:
+            return (2 * marker["radius"], 2 * marker["radius"], 0.0)
+        if name not in self._object_names:
+            raise KeyError(f"unknown object {name!r}")
         return tuple(next(o["size"] for o in self.task["objects"] if o["name"] == name))
 
     def list_objects(self) -> list[str]:
-        return [o["name"] for o in self.task["objects"]]
+        return list(self._object_names) + ([GOAL_MARKER] if self._marker() else [])
 
     def set_velocity(self, vx: float, vy: float, wz: float) -> None:
         command = np.array([vx, vy if self.config.lateral else 0, wz], dtype=float)
@@ -143,7 +162,7 @@ class SimBackend:
 
     def snapshot(self) -> dict:
         objects = {}
-        for name in self.list_objects():
+        for name in self._object_names:
             mat = self._data.body(name).xmat.reshape(3, 3)
             objects[name] = {
                 "pose": list(self.get_object_pose(name)),

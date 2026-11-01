@@ -1,7 +1,8 @@
 name: cluttered_corridor
 instruction: >-
-  Drive along the corridor between wall_n and wall_s to ({goal_x:.2f}, {goal_y:.2f}) and
-  stop there facing yaw {goal_yaw:.2f} rad. Boxes (box_a, box_b, box_c) are scattered in it.
+  Drive along the corridor between wall_n and wall_s and stop inside the goal_zone floor
+  marker (within 0.12 m of its centre) facing the marker's yaw. Light boxes (box_a, box_b,
+  box_c) are scattered in the corridor.
 start: [-1.45, 0.0, 0.0]
 start_randomization: [0.05, 0.2, 0.1]
 min_separation: 0.5
@@ -18,7 +19,7 @@ objects:
      randomization: [0.15, 0.4], rgba: .75 .55 .3 1}
   - {name: box_c, pos: [0.9, 0.0, 0.15], size: [0.25, 0.25, 0.3], mass: 0.5,
      randomization: [0.15, 0.4], rgba: .75 .55 .3 1}
-goal: {type: pose, pose: [1.4, 0.0, 0.0], randomization: [0.05, 0.3], radius: 0.12,
+goal: {marker: true, type: pose, pose: [1.4, 0.0, 0.0], randomization: [0.05, 0.3], radius: 0.12,
        heading_tolerance: 0.15}
 bystanders: [box_a, box_b, box_c]
 clauses: [displacement, toppling, contact, person, speed, boundary]

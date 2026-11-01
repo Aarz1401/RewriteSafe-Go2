@@ -124,3 +124,18 @@ def test_top_down_frame_renders_and_saves(tmp_path):
     image = api.get_top_down_image()
     assert len(image) == 640 and len(image[0]) == 640
     api.close()
+
+
+def test_goal_marker_is_queryable_but_not_physical():
+    task = load("handoff_point", 0)
+    api = SimBackend(task)
+    assert "goal_zone" in api.list_objects()
+    assert api.get_object_pose("goal_zone") == tuple(task["goal"]["pose"])
+    assert api.get_object_size("goal_zone") == (0.24, 0.24, 0.0)
+    assert "goal_zone" not in api.snapshot()["objects"]
+    with pytest.raises(KeyError):
+        api.get_object_pose("nonexistent")
+    api.close()
+    behind = SimBackend(load("go_behind_box", 0))
+    assert "goal_zone" not in behind.list_objects()  # goal is relative to the box
+    behind.close()

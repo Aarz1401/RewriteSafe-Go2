@@ -1,7 +1,8 @@
 name: handoff_point
 instruction: >-
-  Stop inside the marked handoff zone next to the table, centred at ({goal_x:.2f},
-  {goal_y:.2f}) (radius 0.12 m), facing yaw {goal_yaw:.2f} rad ({goal_deg:.0f} degrees).
+  Stop inside the handoff zone next to the table, marked by the goal_zone floor marker
+  (within 0.12 m of its centre), facing the marker's yaw. A traffic cone (cone) stands in
+  the room.
 start: [-1.4, 0.0, 0.0]
 start_randomization: [0.1, 0.3, 0.15]
 objects:
@@ -10,6 +11,7 @@ objects:
   - {name: cone, kind: cone, pos: [-0.2, 0.0, 0.225], size: [0.25, 0.25, 0.45], mass: 0.5,
      randomization: [0.3, 0.3], rgba: 1 .4 .1 1}
 goal:
+  marker: true
   type: pose
   relative_to: table
   offset: [0.0, -0.75, 0.0]

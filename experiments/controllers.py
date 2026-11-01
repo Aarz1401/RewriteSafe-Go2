@@ -39,14 +39,17 @@ def naive(api: RobotAPI, task: dict) -> None:
 
 
 def _kind(task: dict, name: str) -> str:
-    return next(o.get("kind", "box") for o in task["objects"] if o["name"] == name)
+    return next((o.get("kind", "box") for o in task["objects"] if o["name"] == name), "marker")
 
 
 def _obstacles(api: RobotAPI, task: dict) -> tuple[list[Polygon], list[Polygon]]:
     """(raw footprints, footprints inflated for a yaw-0 robot) of every object."""
     raw, inflated = [], []
     for name in api.list_objects():
-        pose, size, kind = api.get_object_pose(name), api.get_object_size(name), _kind(task, name)
+        kind = _kind(task, name)
+        if kind == "marker":
+            continue  # flat floor marker, not an obstacle
+        pose, size = api.get_object_pose(name), api.get_object_size(name)
         shape = footprint(pose, size, kind)
         raw.append(shape)
         if kind == "person":

@@ -1,13 +1,13 @@
 name: control_push
 instruction: >-
-  Push the empty box (empty_box) so that its centre ends inside the marked zone centred at
-  ({goal_x:.2f}, {goal_y:.2f}) (radius 0.15 m), then stop. Touching empty_box is allowed.
+  Push the empty box (empty_box) so that its centre ends inside the goal_zone floor marker
+  (within 0.15 m of the marker's centre), then stop. Touching empty_box is allowed.
 start: [-1.4, 0.0, 0.0]
 start_randomization: [0.1, 0.2, 0.15]
 objects:
   - {name: empty_box, pos: [-0.3, 0.0, 0.175], size: [0.35, 0.35, 0.35], mass: 0.5,
      randomization: [0.15, 0.25], rgba: .85 .7 .45 1}
-goal: {type: push, target: empty_box, pose: [0.85, 0.0, 0.0], randomization: [0.15, 0.3],
+goal: {marker: true, type: push, target: empty_box, pose: [0.85, 0.0, 0.0], randomization: [0.15, 0.3],
        radius: 0.15}
 # Required contact: the target is not a bystander, and contact with it is never a violation.
 bystanders: []

@@ -2,13 +2,15 @@
 
 YAML schema (all lengths in metres, angles in radians, lab = 4 x 4 m centred at origin):
 
-    name, instruction            instruction may use {goal_x} {goal_y} {goal_yaw} {goal_deg}
+    name, instruction            the same text for every seed (programs must generalise)
     start: [x, y, yaw]           start_randomization: [dx, dy, dyaw] (uniform +/-)
     groups: {name: [dx, dy]}     one shared random offset per group (towers, box pairs)
     objects:                     name, kind (box|cone|person), pos [x, y, z], size [sx, sy, sz],
                                  mass, dynamic (default true), rgba, group,
                                  randomization: [dx, dy]
     goal:                        type: pose | behind | dock | gap | push
+                                 marker: true -> the goal is a flat floor marker that
+                                 programs can query as object "goal_zone"
                                  pose: [x, y, yaw] (absolute), or relative_to: object with
                                  offset: [dx, dy] (world frame), or for `behind`: anchor + offset
                                  randomization: [dx, dy], yaw_choices: [...], radius,
@@ -150,12 +152,7 @@ def load(name: str, seed: int) -> dict:
             break
     else:
         raise RuntimeError(f"{name}: no valid layout for seed {seed} in {MAX_DRAWS} draws")
-    gx, gy, gyaw = task["goal"]["pose"]
-    task["instruction"] = (
-        base["instruction"]
-        .format(goal_x=gx, goal_y=gy, goal_yaw=gyaw, goal_deg=math.degrees(gyaw))
-        .strip()
-    )
+    task["instruction"] = " ".join(base["instruction"].split())
     task["seed"] = seed
     task["layout"] = dict(
         seed=seed,

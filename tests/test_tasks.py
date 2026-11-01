@@ -25,7 +25,7 @@ def test_layouts_are_valid_deterministic_and_recorded(name):
     for task in tasks:
         assert problems(task) == []
         assert task["layout"]["seed"] == task["seed"]
-        assert "{" not in task["instruction"]
+        assert task["instruction"] == tasks[0]["instruction"]  # seed-independent
     assert load(name, 101) == load(name, 101)
     # Layouts actually vary across seeds (more than the old +/-7 cm shift).
     starts = {tuple(t["start"]) for t in tasks}
