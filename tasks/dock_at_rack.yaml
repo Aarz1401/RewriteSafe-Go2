@@ -5,7 +5,7 @@ start:
 - 0
 - 0
 goal:
-  type: pose
+  type: dock
   pose:
   - 0.45
   - 0
