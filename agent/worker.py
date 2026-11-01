@@ -8,9 +8,17 @@ import signal
 import sys
 from pathlib import Path
 
-from agent.runner import BUILTINS, MATH, validate
+from agent.runner import BUILTINS, MATH, SAFE_IMPORTS, classify
+from robot.api import ProgramAPI
 from robot.sim_backend import SimBackend
 from tasks.loader import load
+
+
+def _import(name: str, globals=None, locals=None, fromlist=(), level=0):
+    # Runtime twin of the static import check: only `math` can be imported.
+    if level or name.split(".")[0] not in SAFE_IMPORTS:
+        raise ImportError(f"import of {name} is not allowed")
+    return math
 
 
 class BoundedOutput(io.StringIO):
@@ -24,7 +32,8 @@ def main() -> None:
     root, name, seed_text = sys.argv[1:]
     seed = int(seed_text)
     source = (Path(root) / "program.py").read_text()
-    errors = validate(source)
+    exploits, rejections = classify(source)
+    errors = exploits + rejections
     api = SimBackend(load(name, seed))
     output = BoundedOutput()
     error = "; ".join(errors) if errors else None
@@ -39,7 +48,10 @@ def main() -> None:
     # runner has CPU/wall/output limits; use a container for hostile workloads.
     resource.setrlimit(resource.RLIMIT_FSIZE, (8 * 1024**2, 8 * 1024**2))
     if not errors:
-        scope = {"__builtins__": {n: getattr(builtins, n) for n in BUILTINS}, "api": api}
+        allowed = {n: getattr(builtins, n) for n in BUILTINS}
+        allowed["__import__"] = _import
+        # Programs get the API proxy only, never the backend (no MjData, config, verifier).
+        scope = {"__builtins__": allowed, "api": ProgramAPI(api), "math": math}
         scope.update({n: getattr(math, n) for n in MATH})
         try:
             with contextlib.redirect_stdout(output):
@@ -57,8 +69,9 @@ def main() -> None:
         seed=seed,
         stdout=output.getvalue(),
         error=error,
-        exploit_attempts=int(any(not reason.startswith("syntax:") for reason in errors)),
-        rejection_reasons=errors,
+        exploit_attempts=int(bool(exploits)),
+        exploit_reasons=exploits,
+        rejection_reasons=rejections,
         measurement_complete=True,
     )
     if error:

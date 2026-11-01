@@ -8,18 +8,33 @@ import numpy as np
 from sim.scene import build
 from verifier.core import Verifier
 
+DT = 0.01  # MuJoCo timestep (s); also the verifier's control-step period.
+
 
 @dataclass(frozen=True)
 class SimConfig:
-    speed_cap: float = 0.5
-    lateral: bool = True
-    acceleration: float = 0.8
-    latency: float = 0.06
-    noise: float = 0.003
-    max_seconds: float = 90.0
+    """Locomotion surrogate parameters (uncalibrated; see DESIGN_LOG.md)."""
+
+    speed_cap: float = 0.5  # hard cap on commanded planar speed (m/s)
+    lateral: bool = True  # whether vy commands are honoured (holonomic)
+    acceleration: float = 0.8  # max planar acceleration of the tracking controller (m/s^2)
+    latency: float = 0.06  # command latency (s), rounded to whole timesteps
+    noise: float = 0.003  # std of per-step velocity-tracking noise (m/s)
+    yaw_rate_cap: float = 1.2  # hard cap on commanded yaw rate (rad/s)
+    max_seconds: float = 90.0  # simulated-time horizon per episode (s)
+
+    @classmethod
+    def from_dict(cls, values: dict) -> "SimConfig":
+        return cls(**{k: v for k, v in values.items() if k in cls.__dataclass_fields__})
 
 
 class SimBackend:
+    """Planar rigid-body Go2-W surrogate in MuJoCo implementing `robot.api.RobotAPI`.
+
+    Underscore attributes hold MuJoCo state; controller programs never receive this object,
+    only a `robot.api.ProgramAPI` wrapper around its API methods.
+    """
+
     def __init__(self, task: dict, config: SimConfig | None = None, video: bool = False) -> None:
         self.task, self.config = task, config or SimConfig()
         self._model = build(task)
@@ -27,7 +42,8 @@ class SimBackend:
         self._data.qpos[:3] = task["start"]
         self._rng = np.random.default_rng(task["seed"])
         self._command = np.zeros(3)
-        self._queue = deque([np.zeros(3) for _ in range(round(self.config.latency / 0.01) + 1)])
+        # A queue of n zero commands delays every command by exactly n timesteps.
+        self._queue = deque([np.zeros(3) for _ in range(round(self.config.latency / DT))])
         self._renderer = None
         self.frames: list = []
         self.video = video
@@ -59,13 +75,13 @@ class SimBackend:
             raise ValueError("Nonfinite command")
         norm = np.linalg.norm(command[:2])
         command[:2] *= min(1, self.config.speed_cap / max(norm, 1e-9))
-        command[2] = np.clip(command[2], -1.2, 1.2)
+        command[2] = np.clip(command[2], -self.config.yaw_rate_cap, self.config.yaw_rate_cap)
         self._command = command
 
     def sleep(self, seconds: float) -> None:
         if not math.isfinite(seconds) or not 0 <= seconds <= self.config.max_seconds:
             raise ValueError("Invalid duration")
-        for _ in range(math.ceil(seconds / 0.01)):
+        for _ in range(max(int(seconds > 0), round(seconds / DT))):
             self._step()
 
     def _step(self) -> None:

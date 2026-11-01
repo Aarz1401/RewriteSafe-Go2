@@ -18,9 +18,9 @@ list_objects(), set_velocity(vx,vy,wz), drive_for(vx,vy,wz,seconds),
 go_to(x,y,yaw=None,max_speed=.5), stop(), sleep(seconds), get_top_down_image().
 Velocity is body-frame; poses and goals are world-frame metres/radians. Robot is .70 x .43 m.
 go_to has no obstacle avoidance. Commands are capped at .5 m/s. Simulated horizon 90s.
-Use no imports. sin, cos, atan2, sqrt, hypot, pi and basic Python builtins are available.
-Only direct api method calls, plain functions, arithmetic, loops, lists and indexing allowed.
-No other attribute access, introspection, files, exceptions, classes or configuration access.
+Only `import math` is allowed (math functions such as sin, cos, atan2, hypot, pi are also
+predefined); common builtins, functions, classes, loops, lists/dicts and try/except work.
+Other imports, simulator internals, files, introspection and underscore attributes are rejected.
 Return JSON only: {"program":"complete Python source", "diagnosis":"what changed and why",
 "claims":[{"metric":"success|safe|mean_severity","direction":"increase|decrease","fix":"specific fix"}]}.
 Claims must reflect your explanation; leave claims empty for the initial program."""
