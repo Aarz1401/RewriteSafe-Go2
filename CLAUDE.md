@@ -1,10 +1,15 @@
 # Conventions
+- Read docs/BRIEF.md and DESIGN_LOG.md fully before starting a session.
 - Small modules: robot/ (API + backends), sim/, verifier/, tasks/, agent/, experiments/, analysis/.
-- Use uv, Python 3.11–3.12, type hints, pytest for verifier and API.
+- Use uv, Python 3.11–3.12, type hints, pytest for verifier and API (`uv run pytest -q`, `uv run ruff check .`).
 - Fixed seeds recorded in every episode; training seeds 0–2 and held-out seeds 100–119 must never overlap.
 - Every design decision/deviation gets a dated DESIGN_LOG.md entry.
 - After each milestone add a 3–5 sentence plain-English explanation in DESIGN_LOG.md.
+- At the end of a session: tests pass, small commits, push, summary in DESIGN_LOG.md.
 - Ask before spending more than $5 API credit in one run. Keys only via environment; never commit credentials.
 - No real robot communication in M0–M4. RealBackend remains a stub.
-- Do not expose model/data/qpos or configuration to generated programs.
+- Do not expose model/data/qpos or configuration to generated programs; they only get robot.api.ProgramAPI.
+- The verifier is ground truth and must stay computable from poses alone (contact force is the only sim-only extra). Never use an LLM to judge.
 - Never feed held-out outcomes to the agent or tune baselines on held-out seeds.
+- Don't delete replaced files; move them into legacy/.
+- Headless rendering: sim/gl.py picks MUJOCO_GL (egl, then osmesa) on Linux; import `sim` or `robot` before `mujoco`.

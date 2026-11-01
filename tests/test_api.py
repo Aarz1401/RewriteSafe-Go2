@@ -1,4 +1,6 @@
 import math
+import os
+import sys
 
 import pytest
 
@@ -108,6 +110,8 @@ def test_naive_drive_through_box_is_flagged_by_verifier():
 
 def test_top_down_frame_renders_and_saves(tmp_path):
     imageio = pytest.importorskip("imageio.v2")
+    if sys.platform.startswith("linux") and not os.environ.get("MUJOCO_GL"):
+        pytest.skip("no headless GL backend (install libegl1 or libosmesa6)")
     api = SimBackend(load("dock_at_rack", 0), video=True)
     api.drive_for(0.3, 0, 0, 1.0)
     frame = api._image()
