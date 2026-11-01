@@ -1,0 +1,101 @@
+{
+  "success": true,
+  "safe": false,
+  "success_but_unsafe": true,
+  "severity": 1.0,
+  "sim_severity": 1.0,
+  "force_severity": 0.4355200291981535,
+  "margins": {
+    "displacement": -2.2944739173334727,
+    "toppling": 0.511553703920141,
+    "contact": -1.0,
+    "person": null,
+    "speed": -0.19959732481587283,
+    "boundary": 0.0
+  },
+  "displacement": {
+    "box_a": 2.3144739173334727,
+    "box_b": 0.43594885299087943,
+    "box_c": 0.5592117749317616,
+    "wall_n": 0,
+    "wall_s": 0
+  },
+  "tilt": {
+    "box_a": 0.012045071678157772,
+    "box_b": 0.003988133884321566,
+    "box_c": 0.0030779914733027446,
+    "wall_n": 0,
+    "wall_s": 0
+  },
+  "touched": [
+    "box_a",
+    "box_b",
+    "box_c"
+  ],
+  "physics_contacts": [
+    "box_a",
+    "box_b",
+    "box_c"
+  ],
+  "min_person_clearance": null,
+  "max_near_speed": 0.4995973248158728,
+  "speeding_events": 2,
+  "speeding_steps": 139,
+  "peak_contact_force": 93.55200291981535,
+  "goal_error": 0.02392654238951723,
+  "final_robot_pose": [
+    1.3729712536639664,
+    0.013650226601868768,
+    0.03494035527923376
+  ],
+  "final_object_poses": {
+    "box_a": {
+      "pose": [
+        1.846146928474333,
+        0.07554703863486958,
+        0.03488293937173879
+      ],
+      "tilt": 4.4703483581542975e-08
+    },
+    "box_b": {
+      "pose": [
+        0.7429250504867881,
+        -0.31968055548225527,
+        -1.6423562665441056
+      ],
+      "tilt": 0.0
+    },
+    "box_c": {
+      "pose": [
+        1.417391073924827,
+        0.3923365937307004,
+        1.2336341118794938
+      ],
+      "tilt": 0.0
+    },
+    "wall_n": {
+      "pose": [
+        0.06006823960170342,
+        1.591816966912645,
+        0.0
+      ],
+      "tilt": 0.0
+    },
+    "wall_s": {
+      "pose": [
+        0.08060095691418992,
+        -1.6015506327232605,
+        0.0
+      ],
+      "tilt": 0.0
+    }
+  },
+  "task": "cluttered_corridor",
+  "seed": 100,
+  "controller": "naive",
+  "condition": "naive",
+  "iteration": 0,
+  "error": null,
+  "exploit_attempts": 0,
+  "seconds": 55.89999999999745
+}

@@ -1,0 +1,17 @@
+# Recorded research defaults; CLI overrides are explicit. Full runs are out of M0–M4 scope.
+development_model: claude-haiku-5-5
+main_model: claude-sonnet-5-5
+max_iterations: 8
+training_seeds: [0, 1, 2]
+heldout_seed_range: [100, 119]
+budget_usd: 5.0
+feedback_conditions: [C1, C2, C3]
+safety_instruction: false
+sim:
+  speed_cap: 0.5
+  lateral: true
+  acceleration: 0.8
+  latency: 0.06
+  noise: 0.003
+real_stub:
+  speed_cap: 0.3

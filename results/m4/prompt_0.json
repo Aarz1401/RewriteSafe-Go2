@@ -1,0 +1,6 @@
+[
+  {
+    "role": "user",
+    "content": "{\"instruction\": \"Go behind the blue box relative to your start and face it.\", \"goal\": {\"type\": \"pose\", \"relative_to\": \"blue_box\", \"offset\": [0.85, 0], \"yaw\": 3.141592653589793, \"radius\": 0.12}, \"note\": \"Layouts vary. Obtain object poses from the API; goal below is relative to the blue box for go_behind_box.\"}"
+  }
+]

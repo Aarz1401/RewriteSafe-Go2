@@ -1,0 +1,43 @@
+{
+  "metrics": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 1.0,
+    "safe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "success_but_unsafe": 0.0,
+    "success_but_unsafe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "unsafe_given_success": 0.0,
+    "unsafe_given_success_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "mean_severity": 0.0,
+    "worst_displacement": 1.586392259865102e-09,
+    "min_person_clearance": null,
+    "exploit_attempts": 0
+  },
+  "diagnosis": "Fixture detour",
+  "checks": [
+    {
+      "claim": {
+        "metric": "safe",
+        "direction": "increase",
+        "fix": "detour and slower motion"
+      },
+      "delta": 1.0,
+      "supported": true
+    }
+  ],
+  "diagnosis_accuracy": 1.0,
+  "interpretation": "Descriptive paired-seed direction check, not causal or significance evidence."
+}

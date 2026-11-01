@@ -1,0 +1,1 @@
+{"program": "x,y,a = api.get_object_pose(\"blue_box\")\napi.go_to(x+.85,y,pi,max_speed=0.5)\n", "diagnosis": "Fixture straight route", "claims": []}

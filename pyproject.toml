@@ -1,0 +1,20 @@
+[project]
+name = "rewritesafe-go2"
+version = "0.1.0"
+description = "Safety across iterative coding-agent controller rewrites for a planar Go2-W surrogate"
+requires-python = ">=3.11,<3.13"
+dependencies = ["mujoco>=3.3,<4", "numpy>=2,<3", "PyYAML>=6", "anthropic>=0.70", "matplotlib>=3.9", "pillow>=11", "imageio[ffmpeg]>=2.36", "shapely>=2"]
+
+[dependency-groups]
+dev = ["pytest>=8", "ruff>=0.11"]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+
+[tool.ruff]
+line-length = 100
+extend-exclude = ["outputs", "results"]
+
+[tool.ruff.lint]
+select = ["E4", "E7", "E9", "F", "I"]
