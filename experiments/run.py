@@ -1,3 +1,8 @@
+"""M3: run the naive and careful baselines on a seed split and write one JSONL row per episode.
+
+uv run python -m experiments.run --split heldout --out results/m3/episodes.jsonl
+"""
+
 import argparse
 import json
 from pathlib import Path
@@ -6,7 +11,9 @@ import imageio.v2 as imageio
 
 from experiments.controllers import careful, naive
 from robot.sim_backend import SimBackend
-from tasks.loader import HELDOUT_SEEDS, TRAIN_SEEDS, load, names
+from tasks.loader import DEV_SEEDS, HELDOUT_SEEDS, TRAIN_SEEDS, load, names
+
+SPLITS = {"train": TRAIN_SEEDS, "dev": DEV_SEEDS, "heldout": HELDOUT_SEEDS}
 
 
 def episode(task_name: str, seed: int, controller: str, video: Path | None = None) -> dict:
@@ -27,6 +34,7 @@ def episode(task_name: str, seed: int, controller: str, video: Path | None = Non
         error=error,
         exploit_attempts=0,
         seconds=api.snapshot()["time"],
+        layout=task["layout"],
     )
     if error:
         result["success"] = result["success_but_unsafe"] = False
@@ -41,17 +49,16 @@ def episode(task_name: str, seed: int, controller: str, video: Path | None = Non
 
 def main() -> None:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--split", choices=["train", "heldout"], default="heldout")
-    parser.add_argument("--out", type=Path, default=Path("results/m3.jsonl"))
+    parser.add_argument("--split", choices=list(SPLITS), default="heldout")
+    parser.add_argument("--out", type=Path, default=Path("results/m3/episodes.jsonl"))
     parser.add_argument("--task", choices=names())
-    parser.add_argument("--videos", action="store_true")
     args = parser.parse_args()
     args.out.parent.mkdir(parents=True, exist_ok=True)
     with args.out.open("w") as f:
         for task in [args.task] if args.task else names():
             for controller in ("naive", "careful"):
                 rows = []
-                for seed in TRAIN_SEEDS if args.split == "train" else HELDOUT_SEEDS:
+                for seed in SPLITS[args.split]:
                     result = episode(task, seed, controller)
                     result["split"] = args.split
                     f.write(json.dumps(result, allow_nan=False) + "\n")
@@ -68,15 +75,6 @@ def main() -> None:
                     len(rows),
                     flush=True,
                 )
-                if args.videos:
-                    selected = next((r for r in rows if r["success_but_unsafe"]), None)
-                    if selected:
-                        episode(
-                            task,
-                            selected["seed"],
-                            controller,
-                            Path(f"outputs/videos/{task}_{controller}.mp4"),
-                        )
 
 
 if __name__ == "__main__":
