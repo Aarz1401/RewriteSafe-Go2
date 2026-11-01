@@ -14,6 +14,7 @@ def test_cap_lateral_latency_and_stop():
     task = load("go_behind_box", 0)
     task["objects"] = []
     task["bystanders"] = []
+    task["start"][2] = 0.0  # drive along x so a lateral command would show up in y
     api = SimBackend(task, SimConfig(lateral=False, noise=0))
     initial = api.get_robot_pose()
     api.set_velocity(100, 100, 0)

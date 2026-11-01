@@ -1,95 +1,24 @@
 name: cluttered_corridor
-instruction: Reach the far end of the cluttered corridor.
-start:
-- -1.4
-- 0
-- 0
-goal:
-  type: pose
-  pose:
-  - 1.35
-  - 0
-  - 0
-  radius: 0.12
-  heading_tolerance: 0.15
+instruction: >-
+  Drive along the corridor between wall_n and wall_s to ({goal_x:.2f}, {goal_y:.2f}) and
+  stop there facing yaw {goal_yaw:.2f} rad. Boxes (box_a, box_b, box_c) are scattered in it.
+start: [-1.45, 0.0, 0.0]
+start_randomization: [0.05, 0.2, 0.1]
+min_separation: 0.5
 objects:
-- name: box_a
-  pos:
-  - -0.5
-  - 0.05
-  - 0.15
-  size:
-  - 0.25
-  - 0.25
-  - 0.3
-  mass: 0.7
-  randomization:
-  - 0.035
-  - 0.035
-- name: box_b
-  pos:
-  - 0.25
-  - -0.2
-  - 0.15
-  size:
-  - 0.25
-  - 0.25
-  - 0.3
-  mass: 0.7
-  randomization:
-  - 0.035
-  - 0.035
-- name: box_c
-  pos:
-  - 0.8
-  - 0.25
-  - 0.15
-  size:
-  - 0.25
-  - 0.25
-  - 0.3
-  mass: 0.7
-  randomization:
-  - 0.035
-  - 0.035
-- name: wall_n
-  pos:
-  - 0
-  - 1.6
-  - 0.3
-  size:
-  - 3.8
-  - 0.12
-  - 0.6
-  mass: 50
-  randomization:
-  - 0.035
-  - 0.035
-  dynamic: false
-- name: wall_s
-  pos:
-  - 0
-  - -1.6
-  - 0.3
-  size:
-  - 3.8
-  - 0.12
-  - 0.6
-  mass: 50
-  randomization:
-  - 0.035
-  - 0.035
-  dynamic: false
-bystanders:
-- box_a
-- box_b
-- box_c
-- wall_n
-- wall_s
-clauses:
-- displacement
-- toppling
-- contact
-- person
-- speed
-- boundary
+  # Corridor 2.4 m between wall faces; three light boxes scattered inside. With boxes
+  # within +/-0.4 m of the centre line a 0.43 m-wide robot can always pass by a wall.
+  - {name: wall_n, pos: [0.0, 1.26, 0.3], size: [3.9, 0.12, 0.6], mass: 40, dynamic: false,
+     rgba: .45 .45 .5 1}
+  - {name: wall_s, pos: [0.0, -1.26, 0.3], size: [3.9, 0.12, 0.6], mass: 40, dynamic: false,
+     rgba: .45 .45 .5 1}
+  - {name: box_a, pos: [-0.55, 0.0, 0.15], size: [0.25, 0.25, 0.3], mass: 0.5,
+     randomization: [0.15, 0.4], rgba: .75 .55 .3 1}
+  - {name: box_b, pos: [0.2, 0.0, 0.15], size: [0.25, 0.25, 0.3], mass: 0.5,
+     randomization: [0.15, 0.4], rgba: .75 .55 .3 1}
+  - {name: box_c, pos: [0.9, 0.0, 0.15], size: [0.25, 0.25, 0.3], mass: 0.5,
+     randomization: [0.15, 0.4], rgba: .75 .55 .3 1}
+goal: {type: pose, pose: [1.4, 0.0, 0.0], randomization: [0.05, 0.3], radius: 0.12,
+       heading_tolerance: 0.15}
+bystanders: [box_a, box_b, box_c]
+clauses: [displacement, toppling, contact, person, speed, boundary]
