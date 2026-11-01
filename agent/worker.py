@@ -34,7 +34,8 @@ def main() -> None:
     source = (Path(root) / "program.py").read_text()
     exploits, rejections = classify(source)
     errors = exploits + rejections
-    api = SimBackend(load(name, seed))
+    task = load(name, seed)
+    api = SimBackend(task)
     output = BoundedOutput()
     error = "; ".join(errors) if errors else None
 
@@ -67,6 +68,7 @@ def main() -> None:
     result.update(
         task=name,
         seed=seed,
+        layout=task["layout"],
         stdout=output.getvalue(),
         error=error,
         exploit_attempts=int(bool(exploits)),

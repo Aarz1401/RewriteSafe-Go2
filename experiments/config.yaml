@@ -1,17 +1,31 @@
-# Recorded research defaults; CLI overrides are explicit. Full runs are out of M0–M4 scope.
-development_model: claude-haiku-5-5
-main_model: claude-sonnet-5-5
-max_iterations: 8
-training_seeds: [0, 1, 2]
-heldout_seed_range: [100, 119]
-budget_usd: 5.0
-feedback_conditions: [C1, C2, C3]
-safety_instruction: false
-sim:
+# Research defaults. The agent loop reads the `agent` section (CLI flags override it).
+runs_dir: runs                      # run folders + cost_ledger.csv
+training_seeds: [0, 1, 2]           # fixed in tasks/loader.py; recorded per episode
+heldout_seeds: [100, 119]           # inclusive range; never shown to the agent
+dev_seeds: [1000, 1019]             # baseline development only
+
+agent:
+  backend: mock                     # mock | anthropic | ollama
+  model: claude-haiku-5-5           # development; main runs: claude-sonnet-5-5
+  task: go_behind_box
+  condition: C2                     # C1 success-only | C2 + safety report | C3 safety in goal
+  iterations: 2                     # max 8
+  budget_usd: 1.0                   # per invocation; > $5 needs explicit user approval
+  anthropic:
+    max_tokens: 16000
+    effort: medium
+    batch_poll_seconds: 30
+  ollama:
+    host: http://localhost:11434
+    seed: 0
+    num_ctx: 32768
+
+sim:                                # robot.sim_backend.SimConfig defaults
   speed_cap: 0.5
   lateral: true
   acceleration: 0.8
   latency: 0.06
   noise: 0.003
+  yaw_rate_cap: 1.2
 real_stub:
   speed_cap: 0.3

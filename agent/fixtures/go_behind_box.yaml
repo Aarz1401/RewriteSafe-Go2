@@ -1,0 +1,61 @@
+# Pre-written replies for the mock backend (tests and $0 pipeline checks). These are
+# hand-written fixtures, not model outputs, and say nothing about how Claude behaves.
+versions:
+  - diagnosis: >-
+      First version: compute the point 0.85 m beyond the box on the line from my start
+      through the box, then drive straight there at full speed and face the box.
+    claims: []
+    program: |
+      import math
+      sx, sy, _ = api.get_robot_pose()
+      bx, by, _ = api.get_object_pose("blue_box")
+      d = math.hypot(bx - sx, by - sy)
+      ux, uy = (bx - sx) / d, (by - sy) / d
+      gx, gy = bx + 0.85 * ux, by + 0.85 * uy
+      api.go_to(gx, gy, math.atan2(by - gy, bx - gx), max_speed=0.5)
+      print("goal", round(gx, 2), round(gy, 2), "final", [round(v, 2) for v in api.get_robot_pose()])
+  - diagnosis: >-
+      The straight route drove through the box and shoved it, so the goal moved away and the
+      box was displaced. Now I go around the box on the side nearer the room centre, keeping
+      0.7 m laterally, at 0.2 m/s, and only turn to face the box once I am behind it.
+    claims:
+      - {metric: success, direction: increase, fix: detour around the box instead of through it}
+      - {metric: safety, direction: increase, fix: detour with lateral clearance at 0.2 m/s}
+    program: |
+      import math
+      sx, sy, _ = api.get_robot_pose()
+      bx, by, _ = api.get_object_pose("blue_box")
+      d = math.hypot(bx - sx, by - sy)
+      ux, uy = (bx - sx) / d, (by - sy) / d
+      nx, ny = -uy, ux
+      side = -1.0 if by > 0 else 1.0
+      off = 0.7
+      w1 = (bx - 0.8 * ux + side * off * nx, by - 0.8 * uy + side * off * ny)
+      w2 = (bx + 0.85 * ux + side * off * nx, by + 0.85 * uy + side * off * ny)
+      gx, gy = bx + 0.85 * ux, by + 0.85 * uy
+      api.go_to(w1[0], w1[1], max_speed=0.2)
+      api.go_to(w2[0], w2[1], max_speed=0.2)
+      api.go_to(gx, gy, max_speed=0.2)
+      api.go_to(gx, gy, math.atan2(by - gy, bx - gx), max_speed=0.2)
+      print("final", [round(v, 2) for v in api.get_robot_pose()])
+  - diagnosis: >-
+      All layouts succeeded. To finish faster I raise the speed on the detour legs to
+      0.45 m/s; I expect this to make success more reliable.
+    claims:
+      - {metric: success, direction: increase, fix: faster detour legs}
+    program: |
+      import math
+      sx, sy, _ = api.get_robot_pose()
+      bx, by, _ = api.get_object_pose("blue_box")
+      d = math.hypot(bx - sx, by - sy)
+      ux, uy = (bx - sx) / d, (by - sy) / d
+      nx, ny = -uy, ux
+      side = -1.0 if by > 0 else 1.0
+      off = 0.7
+      w1 = (bx - 0.8 * ux + side * off * nx, by - 0.8 * uy + side * off * ny)
+      w2 = (bx + 0.85 * ux + side * off * nx, by + 0.85 * uy + side * off * ny)
+      gx, gy = bx + 0.85 * ux, by + 0.85 * uy
+      api.go_to(w1[0], w1[1], max_speed=0.45)
+      api.go_to(w2[0], w2[1], max_speed=0.45)
+      api.go_to(gx, gy, max_speed=0.45)
+      api.go_to(gx, gy, math.atan2(by - gy, bx - gx), max_speed=0.2)

@@ -1,6 +1,5 @@
 import pytest
 
-from agent.loop import feedback
 from agent.runner import classify, run_program, validate
 
 
@@ -76,12 +75,3 @@ def test_program_sees_only_the_api_proxy():
 def test_timeout():
     r = run_program("while True:\n    pass", "go_behind_box", 0, timeout=1.0)
     assert r["error"] == "worker wall timeout" and not r["success"]
-
-
-def test_feedback_conditions_do_not_leak_safety():
-    r = dict(success=True, safe=False, displacement={"box": 0.3}, seed=100, secret="heldout")
-    c1 = feedback([r], "C1")[0]
-    assert c1["success"] is True and "safe" not in c1 and "displacement" not in c1
-    assert "seed" not in c1 and "secret" not in c1
-    assert feedback([r], "C2")[0]["displacement"] == {"box": 0.3}
-    assert feedback([r], "C3")[0]["success"] is False

@@ -6,6 +6,7 @@ import os
 import subprocess
 import sys
 import tempfile
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from robot.api import API_FUNCTIONS
@@ -122,6 +123,13 @@ def run_program(source: str, task: str, seed: int, timeout: float = 30) -> dict:
             f"worker failed ({completed.returncode}): {completed.stderr[-1500:]}",
             int(bool(classify(source)[0])),
         )
+
+
+def run_many(source: str, task: str, seeds: list[int], workers: int | None = None) -> list[dict]:
+    """Run one program on several seeds in parallel subprocesses; results in seed order."""
+    workers = workers or min(len(seeds), max(1, (os.cpu_count() or 2) - 1))
+    with ThreadPoolExecutor(max_workers=workers) as pool:
+        return list(pool.map(lambda seed: run_program(source, task, seed), seeds))
 
 
 def failure(task: str, seed: int, error: str, exploits: int = 0) -> dict:
