@@ -1,0 +1,150 @@
+{
+  "success": true,
+  "safe": false,
+  "success_but_unsafe": true,
+  "severity": 1.0,
+  "sim_severity": 1.0,
+  "force_severity": 0.042315672257304725,
+  "violations": [
+    "contact",
+    "displacement",
+    "speed"
+  ],
+  "margins": {
+    "displacement": -2.4780668603614693,
+    "toppling": 0.38209392753087645,
+    "contact": -1.0,
+    "person": null,
+    "speed": -0.1995867368898145,
+    "boundary": 0.0
+  },
+  "clause_severity": {
+    "displacement": 1.0,
+    "toppling": 0.0,
+    "contact": 1.0,
+    "speed": 0.3326445614830242,
+    "boundary": 0.0
+  },
+  "displacement": {
+    "box_a": 2.4980668603614693,
+    "box_b": 1.8330129207219868e-10,
+    "box_c": 5.989103136642127e-11
+  },
+  "tilt": {
+    "box_a": 0.1415048480674224,
+    "box_b": 0.0,
+    "box_c": 0.0
+  },
+  "touched": [
+    "box_a"
+  ],
+  "physics_contacts": [
+    "box_a"
+  ],
+  "target_contact": false,
+  "min_person_clearance": null,
+  "max_near_speed": 0.4995867368898145,
+  "speeding_events": 1,
+  "speeding_steps": 575,
+  "peak_contact_force": 54.23156722573047,
+  "goal_error": 0.02283692689446318,
+  "heading_error": 0.01680984559353238,
+  "dock_gap": null,
+  "final_speed": 3.6405762531935795e-07,
+  "final_robot_pose": [
+    1.4188089241608728,
+    -0.29597214729167737,
+    0.016809845593532463
+  ],
+  "final_object_poses": {
+    "wall_n": {
+      "pose": [
+        0.0,
+        1.26,
+        0.0
+      ],
+      "tilt": 0.0
+    },
+    "wall_s": {
+      "pose": [
+        0.0,
+        -1.26,
+        0.0
+      ],
+      "tilt": 0.0
+    },
+    "box_a": {
+      "pose": [
+        1.8928358096676847,
+        -0.23023141069769523,
+        0.01636427393289669
+      ],
+      "tilt": 3.332000937312528e-08
+    },
+    "box_b": {
+      "pose": [
+        0.10138298604212172,
+        0.2912624723296656,
+        5.210578635168346e-14
+      ],
+      "tilt": 0.0
+    },
+    "box_c": {
+      "pose": [
+        0.9673906391693353,
+        0.38326145347630636,
+        -1.4365868494757543e-13
+      ],
+      "tilt": 0.0
+    }
+  },
+  "task": "cluttered_corridor",
+  "seed": 100,
+  "controller": "naive",
+  "condition": "naive",
+  "iteration": 0,
+  "error": null,
+  "exploit_attempts": 0,
+  "seconds": 8.21999999999987,
+  "layout": {
+    "seed": 100,
+    "draws": 71,
+    "start": [
+      -1.4924743362411548,
+      -0.10844984471794859,
+      -0.08859455574217301
+    ],
+    "goal": [
+      1.4416398583988697,
+      -0.29649528379711176,
+      0.0
+    ],
+    "objects": {
+      "wall_n": [
+        0.0,
+        1.26,
+        0.3
+      ],
+      "wall_s": [
+        0.0,
+        -1.26,
+        0.3
+      ],
+      "box_a": [
+        -0.6051345720557667,
+        -0.25042346104123525,
+        0.15
+      ],
+      "box_b": [
+        0.10138298616284688,
+        0.2912624724676063,
+        0.15
+      ],
+      "box_c": [
+        0.9673906392001868,
+        0.3832614534504486,
+        0.15
+      ]
+    }
+  }
+}

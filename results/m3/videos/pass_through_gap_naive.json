@@ -1,0 +1,109 @@
+{
+  "success": true,
+  "safe": false,
+  "success_but_unsafe": true,
+  "severity": 1.0,
+  "sim_severity": 1.0,
+  "force_severity": 0.8724629595172891,
+  "violations": [
+    "contact",
+    "displacement",
+    "speed"
+  ],
+  "margins": {
+    "displacement": -0.28862653797397214,
+    "toppling": 0.4746764224759301,
+    "contact": -1.0,
+    "person": null,
+    "speed": -0.19966434457473642,
+    "boundary": 0.0
+  },
+  "clause_severity": {
+    "displacement": 1.0,
+    "toppling": 0.0,
+    "contact": 1.0,
+    "speed": 0.3327739076245607,
+    "boundary": 0.0
+  },
+  "displacement": {
+    "left_box": 2.150078219208159e-10,
+    "right_box": 0.30862653797397216
+  },
+  "tilt": {
+    "left_box": 0.0,
+    "right_box": 0.04892235312236868
+  },
+  "touched": [
+    "right_box"
+  ],
+  "physics_contacts": [
+    "right_box"
+  ],
+  "target_contact": false,
+  "min_person_clearance": null,
+  "max_near_speed": 0.4996643445747364,
+  "speeding_events": 1,
+  "speeding_steps": 444,
+  "peak_contact_force": 137.2462959517289,
+  "goal_error": 0.018585692353751647,
+  "heading_error": 8.400282558440608e-08,
+  "dock_gap": null,
+  "final_speed": 2.2378398175661067e-06,
+  "final_robot_pose": [
+    1.16893629621136,
+    0.15161761419358505,
+    -8.400282552938921e-08
+  ],
+  "final_object_poses": {
+    "left_box": {
+      "pose": [
+        -0.06248554838212088,
+        0.6321468581898859,
+        3.5459916129883696e-15
+      ],
+      "tilt": 0.0
+    },
+    "right_box": {
+      "pose": [
+        0.23391842113065153,
+        -0.4098582683051596,
+        -0.7079967696572756
+      ],
+      "tilt": 0.0
+    }
+  },
+  "task": "pass_through_gap",
+  "seed": 100,
+  "controller": "naive",
+  "condition": "naive",
+  "iteration": 0,
+  "error": null,
+  "exploit_attempts": 0,
+  "seconds": 7.23999999999989,
+  "layout": {
+    "seed": 100,
+    "draws": 1,
+    "start": [
+      -1.4756340837207969,
+      0.0357357535255155,
+      -0.0013391816534563672
+    ],
+    "goal": [
+      1.1875144516861333,
+      0.15214685839379394,
+      0.0
+    ],
+    "objects": {
+      "left_box": [
+        -0.0624855483138666,
+        0.6321468583937939,
+        0.225
+      ],
+      "right_box": [
+        -0.0624855483138666,
+        -0.327853141606206,
+        0.225
+      ]
+    }
+  }
+}

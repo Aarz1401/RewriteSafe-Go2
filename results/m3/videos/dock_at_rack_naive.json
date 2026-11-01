@@ -1,0 +1,88 @@
+{
+  "success": true,
+  "safe": false,
+  "success_but_unsafe": true,
+  "severity": 0.33086222060461007,
+  "sim_severity": 0.33086222060461007,
+  "force_severity": 0.0,
+  "violations": [
+    "speed"
+  ],
+  "margins": {
+    "displacement": 0.02,
+    "toppling": 0.5235987755982988,
+    "contact": 0.0,
+    "person": null,
+    "speed": -0.19851733236276603,
+    "boundary": 0.0
+  },
+  "clause_severity": {
+    "displacement": 0.0,
+    "toppling": 0.0,
+    "contact": 0.0,
+    "speed": 0.33086222060461007,
+    "boundary": 0.0
+  },
+  "displacement": {
+    "rack": 0.0
+  },
+  "tilt": {
+    "rack": 0.0
+  },
+  "touched": [],
+  "physics_contacts": [],
+  "target_contact": false,
+  "min_person_clearance": null,
+  "max_near_speed": 0.498517332362766,
+  "speeding_events": 1,
+  "speeding_steps": 42,
+  "peak_contact_force": 0.0,
+  "goal_error": 0.018771315819651545,
+  "heading_error": 1.9171317866550908e-09,
+  "dock_gap": 0.19369022959774154,
+  "final_speed": 2.29651219875645e-06,
+  "final_robot_pose": [
+    0.5270183241971825,
+    0.24462635225263693,
+    1.9171315801610855e-09
+  ],
+  "final_object_poses": {
+    "rack": {
+      "pose": [
+        1.2457085542071074,
+        0.24636922338304335,
+        0.0
+      ],
+      "tilt": 0.0
+    }
+  },
+  "task": "dock_at_rack",
+  "seed": 100,
+  "controller": "naive",
+  "condition": "naive",
+  "iteration": 0,
+  "error": null,
+  "exploit_attempts": 0,
+  "seconds": 5.739999999999922,
+  "layout": {
+    "seed": 100,
+    "draws": 1,
+    "start": [
+      -1.398129693539417,
+      0.05268114966362636,
+      -0.03938958235386052
+    ],
+    "goal": [
+      0.5457085542071074,
+      0.24636922338304335,
+      0.0
+    ],
+    "objects": {
+      "rack": [
+        1.2457085542071074,
+        0.24636922338304335,
+        0.6
+      ]
+    }
+  }
+}

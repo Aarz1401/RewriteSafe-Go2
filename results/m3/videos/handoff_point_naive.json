@@ -1,0 +1,109 @@
+{
+  "success": true,
+  "safe": false,
+  "success_but_unsafe": true,
+  "severity": 1.0,
+  "sim_severity": 1.0,
+  "force_severity": 0.0,
+  "violations": [
+    "contact",
+    "displacement",
+    "speed"
+  ],
+  "margins": {
+    "displacement": -0.27912903663327326,
+    "toppling": 0.42663070821349597,
+    "contact": -1.0,
+    "person": null,
+    "speed": -0.19966485148435104,
+    "boundary": 0.0
+  },
+  "clause_severity": {
+    "displacement": 1.0,
+    "toppling": 0.0,
+    "contact": 1.0,
+    "speed": 0.3327747524739184,
+    "boundary": 0.0
+  },
+  "displacement": {
+    "table": 0.0,
+    "cone": 0.2991290366332733
+  },
+  "tilt": {
+    "table": 0.0,
+    "cone": 0.09696806738480286
+  },
+  "touched": [
+    "cone"
+  ],
+  "physics_contacts": [
+    "cone"
+  ],
+  "target_contact": false,
+  "min_person_clearance": null,
+  "max_near_speed": 0.499664851484351,
+  "speeding_events": 1,
+  "speeding_steps": 361,
+  "peak_contact_force": 24.9047334762911,
+  "goal_error": 0.01896432009034384,
+  "heading_error": 5.575054000672708e-06,
+  "dock_gap": null,
+  "final_speed": 2.31414033736059e-06,
+  "final_robot_pose": [
+    0.8237374789267757,
+    0.12099115218400777,
+    3.1415870785357924
+  ],
+  "final_object_poses": {
+    "table": {
+      "pose": [
+        0.842684635052958,
+        0.8701844854504099,
+        0.0
+      ],
+      "tilt": 0.0
+    },
+    "cone": {
+      "pose": [
+        0.006670288261877235,
+        -0.30429046486055433,
+        -2.4064840948443353
+      ],
+      "tilt": 0.04447039686260887
+    }
+  },
+  "task": "handoff_point",
+  "seed": 100,
+  "controller": "naive",
+  "condition": "naive",
+  "iteration": 0,
+  "error": null,
+  "exploit_attempts": 0,
+  "seconds": 6.2799999999999105,
+  "layout": {
+    "seed": 100,
+    "draws": 1,
+    "start": [
+      -1.3666506072289384,
+      0.027354795963907552,
+      0.14498108893953845
+    ],
+    "goal": [
+      0.842684635052958,
+      0.12018448545040994,
+      3.141592653589793
+    ],
+    "objects": {
+      "table": [
+        0.842684635052958,
+        0.8701844854504099,
+        0.4
+      ],
+      "cone": [
+        -0.24932320724467943,
+        -0.21377162430083918,
+        0.225
+      ]
+    }
+  }
+}
