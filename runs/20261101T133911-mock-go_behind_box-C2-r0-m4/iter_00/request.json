@@ -1,0 +1,6 @@
+[
+ {
+  "role": "user",
+  "content": "## Task\nGo behind the blue box (blue_box) and face it. \"Behind\" means on the far side of the box as seen from your start position: stop with your centre 0.85 m (+/- 0.12 m) from the box centre, on the line from your start position through the box centre, facing the box.\n\nObjects: blue_box (box).\n\nAfter each version I will run your program on three layouts and report what happened. Write the first version now."
+ }
+]

@@ -1,0 +1,14 @@
+{
+ "text": "{\"program\": \"import math\\nsx, sy, _ = api.get_robot_pose()\\nbx, by, _ = api.get_object_pose(\\\"blue_box\\\")\\nd = math.hypot(bx - sx, by - sy)\\nux, uy = (bx - sx) / d, (by - sy) / d\\nnx, ny = -uy, ux\\nside = -1.0 if by > 0 else 1.0\\noff = 0.7\\nw1 = (bx - 0.8 * ux + side * off * nx, by - 0.8 * uy + side * off * ny)\\nw2 = (bx + 0.85 * ux + side * off * nx, by + 0.85 * uy + side * off * ny)\\ngx, gy = bx + 0.85 * ux, by + 0.85 * uy\\napi.go_to(w1[0], w1[1], max_speed=0.2)\\napi.go_to(w2[0], w2[1], max_speed=0.2)\\napi.go_to(gx, gy, max_speed=0.2)\\napi.go_to(gx, gy, math.atan2(by - gy, bx - gx), max_speed=0.2)\\nprint(\\\"final\\\", [round(v, 2) for v in api.get_robot_pose()])\\n\", \"diagnosis\": \"The straight route drove through the box and shoved it, so the goal moved away and the box was displaced. Now I go around the box on the side nearer the room centre, keeping 0.7 m laterally, at 0.2 m/s, and only turn to face the box once I am behind it.\", \"claims\": [{\"metric\": \"success\", \"direction\": \"increase\", \"fix\": \"detour around the box instead of through it\"}, {\"metric\": \"safety\", \"direction\": \"increase\", \"fix\": \"detour with lateral clearance at 0.2 m/s\"}]}",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "model": "mock",
+ "stop_reason": "end_turn",
+ "error": null,
+ "batch": false,
+ "cost_usd": 0.0
+}

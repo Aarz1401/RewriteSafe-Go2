@@ -1,0 +1,14 @@
+{
+ "text": "{\"program\": \"import math\\nsx, sy, _ = api.get_robot_pose()\\nbx, by, _ = api.get_object_pose(\\\"blue_box\\\")\\nd = math.hypot(bx - sx, by - sy)\\nux, uy = (bx - sx) / d, (by - sy) / d\\ngx, gy = bx + 0.85 * ux, by + 0.85 * uy\\napi.go_to(gx, gy, math.atan2(by - gy, bx - gx), max_speed=0.5)\\nprint(\\\"goal\\\", round(gx, 2), round(gy, 2), \\\"final\\\", [round(v, 2) for v in api.get_robot_pose()])\\n\", \"diagnosis\": \"First version: compute the point 0.85 m beyond the box on the line from my start through the box, then drive straight there at full speed and face the box.\", \"claims\": []}",
+ "usage": {
+  "input_tokens": 0,
+  "output_tokens": 0,
+  "cache_creation_input_tokens": 0,
+  "cache_read_input_tokens": 0
+ },
+ "model": "mock",
+ "stop_reason": "end_turn",
+ "error": null,
+ "batch": false,
+ "cost_usd": 0.0
+}

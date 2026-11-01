@@ -1,0 +1,3 @@
+timestamp,run_id,task,condition,iteration,backend,model,batch,input_tokens,cache_creation_input_tokens,cache_read_input_tokens,output_tokens,cost_usd,run_cost_usd
+2026-11-01T13:39:11+00:00,20261101T133911-mock-go_behind_box-C2-r0-m4,go_behind_box,C2,0,mock,mock,False,0,0,0,0,0.000000,0.000000
+2026-11-01T13:39:15+00:00,20261101T133911-mock-go_behind_box-C2-r0-m4,go_behind_box,C2,1,mock,mock,False,0,0,0,0,0.000000,0.000000
