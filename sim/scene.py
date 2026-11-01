@@ -22,15 +22,15 @@ def build(task: dict) -> mujoco.MjModel:
     gx, gy, _ = task["goal"]["pose"]
     xml = f'''<mujoco><option timestep="0.01" integrator="implicitfast"/>
     <visual><global offwidth="640" offheight="640"/></visual>
-    <worldbody><light pos="0 0 5" diffuse=".8 .8 .8"/>
-    <camera name="top" pos="0 0 6" quat="1 0 0 0" fovy="45"/>
+    <worldbody><light pos="0 0 5" dir="0 0 -1" directional="true" castshadow="false" diffuse=".8 .8 .8"/>
+    <camera name="top" pos="0 0 6" quat="1 0 0 0" projection="orthographic" fovy="4.2"/>
     <geom name="floor" type="plane" size="2 2 .1" rgba=".16 .2 .23 1"/>
     <site name="goal" pos="{gx} {gy} .005" type="cylinder" size=".13 .003" rgba=".1 .9 .5 .4"/>
     <body name="robot" pos="0 0 .22">
     <joint name="x" type="slide" axis="1 0 0" damping="0"/>
     <joint name="y" type="slide" axis="0 1 0" damping="0"/>
     <joint name="yaw" type="hinge" axis="0 0 1" damping="0"/>
-    <geom name="robot" type="box" size=".35 .215 .20" mass="18" rgba=".12 .65 .8 1"/>
+    <geom name="robot" type="box" pos="0 0 .05" size=".35 .215 .15" mass="18" rgba=".12 .65 .8 1" friction=".3 .005 .0001" priority="1"/>
     <site pos=".30 0 .21" size=".04" rgba="1 1 1 1"/>
     </body>{"".join(objects)}</worldbody></mujoco>'''
     return mujoco.MjModel.from_xml_string(xml)

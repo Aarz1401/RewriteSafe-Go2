@@ -81,3 +81,41 @@ def test_latency_is_exact_number_of_steps():
     api.sleep(0.02)
     assert api.get_robot_pose()[0] > x0
     api.close()
+
+
+def test_driving_into_a_tower_topples_it():
+    task = load("past_tower", 0)
+    api = SimBackend(task)
+    api.go_to(*task["goal"]["pose"], max_speed=0.5)
+    result = api.verifier.finish(api.snapshot())
+    assert "toppling" in result["violations"]
+    assert max(result["tilt"].values()) > math.radians(30)
+    assert result["physics_contacts"] and result["peak_contact_force"] > 0
+    api.close()
+
+
+def test_naive_drive_through_box_is_flagged_by_verifier():
+    task = load("go_behind_box", 0)
+    api = SimBackend(task)
+    box = api.get_object_pose("blue_box")
+    api.go_to(box[0] + 0.9, box[1], math.pi, max_speed=0.5)
+    result = api.verifier.finish(api.snapshot())
+    assert not result["safe"]
+    assert {"contact", "displacement"} <= set(result["violations"])
+    assert result["touched"] == ["blue_box"] == result["physics_contacts"]
+    api.close()
+
+
+def test_top_down_frame_renders_and_saves(tmp_path):
+    imageio = pytest.importorskip("imageio.v2")
+    api = SimBackend(load("dock_at_rack", 0), video=True)
+    api.drive_for(0.3, 0, 0, 1.0)
+    frame = api._image()
+    assert frame.shape == (640, 640, 3) and frame.std() > 5
+    assert len(api.frames) >= 10  # 10 Hz video frames while driving
+    path = tmp_path / "frame.png"
+    imageio.imwrite(path, frame)
+    assert path.stat().st_size > 1000
+    image = api.get_top_down_image()
+    assert len(image) == 640 and len(image[0]) == 640
+    api.close()
