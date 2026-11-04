@@ -11,6 +11,18 @@ M0–M4 are implemented. **M4 uses a deterministic mock agent, as requested: the
 pipeline checks, not evidence about Claude or iterative learning.** No paid model calls
 or hardware commands were made. The Anthropic adapter is tested using a patched SDK.
 
+The November 4 revision fixes goal-region planning in the corridor, improves tower
+contact response, and enables task prompting for all eight tasks through a read-only
+`get_task_goal()` API. Original November 1 measurements below remain archived unchanged;
+new regression/fresh-validation results are in [the revision folder](results/revision-2026-11-04).
+
+On 20 fresh layouts per changed task, the careful controller succeeds safely on **20/20
+corridor and 20/20 tower episodes**. Naive contact topples the tower on **20/20**, while
+all 20 idle checks remain stable. The original three corridor failures also pass.
+All eight tasks complete two-iteration mock pipeline checks (32 episodes total), and
+**46 tests pass**. Physical dynamics still require lab measurements; the new offline
+fitter is tested using synthetic tracks only.
+
 ## Run locally
 
 Apple Silicon / Python 3.12:
@@ -23,6 +35,7 @@ uv run python -m experiments.run --out outputs/my-m3.jsonl
 uv run python -m analysis.plot outputs/my-m3.jsonl --out outputs/my-m3-plots
 uv run python -m experiments.videos outputs/my-m3.jsonl
 uv run python -m agent.loop --backend mock --out outputs/my-m4
+uv run python -m agent.loop --backend mock --task dock_at_rack --smoke --out outputs/dock-smoke
 uv run python -m analysis.plot outputs/my-m4/episodes.jsonl --out outputs/my-m4-plots
 uv run python -m experiments.replay results/m4/program_1.py --seed 100
 ```
@@ -47,7 +60,7 @@ input/output tokens; other models require explicit verified `--input-price` and
 rejected. Development/main model names and experimental defaults are recorded in
 [experiments/config.yaml](experiments/config.yaml); CLI flags control the current loop.
 
-## First measurements
+## First measurements (November 1; archived)
 
 20 fixed held-out seeds per cell; entries are **success / safe**, out of 20.
 Controllers were calibrated only on seeds 0–2. The behind-box predicate was corrected
@@ -64,7 +77,7 @@ after review, and affected results were rerun; see the design log.
 | handoff_point | 20 / 0 | 20 / 20 |
 | control_push | 20 / 0 | 20 / 20 |
 
-The careful planner fails to find a path on corridor seeds 101, 102 and 105; it stops
+The original careful planner fails to find a path on corridor seeds 101, 102 and 105; it stops
 safely. Those failures are retained, not used to retune the controller. All 20/20
 proportions have Wilson 95% intervals of approximately 83.9–100%, so these small samples
 do not establish universal safety. All naive successful episodes were unsafe.
@@ -96,7 +109,7 @@ noise. Boxes have free joints and physically move/topple; racks and the person p
 are fixed. Lateral commands default on because the SDK exposes `Move(vx, vy, vyaw)`;
 this is not validation of the lab robot's firmware. `go_to` performs no avoidance.
 
-The API includes pose/size queries, object listing, velocity commands, timed driving,
+The API includes a per-episode goal query, pose/size queries, object listing, velocity commands, timed driving,
 point navigation, stop, simulated sleep and a top-down RGB accessor. No simulator
 internals are exposed through the allowed controller language. Imports, private access,
 configuration changes and arbitrary attribute traversal are rejected and logged.
@@ -125,15 +138,18 @@ claimed on macOS.
 - Layouts combine small scene translations and per-object jitter. This is an initial,
   narrow layout distribution. Foam cones are cylindrical collision proxies; the rack and
   table are solid box proxies. Dynamics are uncalibrated, with no leg or wheel simulation.
-  The revised tower topples above 30° in only 1/20 naive held-out runs; sensitivity to
-  toppling needs further development even though displacement/contact violations occur.
-- The M4 agent loop is intentionally scoped to `go_behind_box`; other tasks need
-  per-task goal prompting before full experiments. The eight tasks work in baseline runs.
+  The November 1 tower toppled above 30° in only 1/20 naive held-out runs. The November 4
+  revision changes contact friction and tests both idle stability and impact response.
+- The agent loop supports all eight tasks with `--task`. `get_task_goal()` returns a
+  defensive copy of the current episode's goal, including randomized zone coordinates
+  and the moving behind-box goal. Prompts contain no seed-specific coordinates.
+  `--smoke` uses one training seed and one validation seed per iteration; it is a
+  plumbing check. Mock fixtures deliberately remain simple and can fail tasks.
 - Diagnosis accuracy is a descriptive direction check, not causal evidence. Zero-change
   claims do not count as improvements; no-claim/initial iterations are undefined.
 
-Next: extend goal prompting, add more development layouts and multiple run seeds, audit
-feedback conditions, calibrate dynamics/camera uncertainty, then run authorized model
+Next: add more development layouts and multiple run seeds, audit feedback conditions,
+calibrate dynamics/camera uncertainty using [the offline fitting workflow](docs/CALIBRATION.md), then run authorized model
 experiments. Hardware remains behind `RealBackend`; no Unitree networking is implemented.
 The later lab plan is three tasks × C1/C2 × initial/final × five trials, 0.3 m/s cap,
 operator e-stop, cardboard boxes and a proxy instead of a person.

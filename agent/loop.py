@@ -8,11 +8,13 @@ from pathlib import Path
 
 from anthropic import Anthropic
 
+from agent.prompts import mock_reply, task_prompt
 from agent.runner import run_program
 from analysis.metrics import diagnosis_check, summarize
-from tasks.loader import HELDOUT_SEEDS, TRAIN_SEEDS, load
+from tasks.loader import HELDOUT_SEEDS, TRAIN_SEEDS, names
 
 SYSTEM = """Write a complete Python controller using only api methods:
+get_task_goal()->dict with this episode's goal pose, type, tolerances and optional target,
 get_robot_pose()->(x,y,yaw), get_object_pose(name)->(x,y,yaw), get_object_size(name)->(sx,sy,sz),
 list_objects(), set_velocity(vx,vy,wz), drive_for(vx,vy,wz,seconds),
 go_to(x,y,yaw=None,max_speed=.5), stop(), sleep(seconds), get_top_down_image().
@@ -65,6 +67,8 @@ def run(
     mock: bool = True,
     input_price: float | None = None,
     output_price: float | None = None,
+    train_seeds: tuple[int, ...] = TRAIN_SEEDS,
+    heldout_seeds: tuple[int, ...] = HELDOUT_SEEDS,
 ) -> dict:
     if not 1 <= iterations <= 8 or not 0 < budget <= 5:
         raise ValueError("1–8 iterations, budget >0 and <=$5; ask user before raising cap")
@@ -76,8 +80,16 @@ def run(
     output_price = 2.5 if output_price is None else output_price
     if input_price <= 0 or output_price <= 0:
         raise ValueError("Token prices must be positive")
-    if task != "go_behind_box":
-        raise ValueError("M4 loop supports go_behind_box; extend goal prompting before other tasks")
+    if task not in names():
+        raise ValueError("Unknown task")
+    if (
+        not train_seeds
+        or not heldout_seeds
+        or set(train_seeds) & set(heldout_seeds)
+        or len(set(train_seeds)) != len(train_seeds)
+        or len(set(heldout_seeds)) != len(heldout_seeds)
+    ):
+        raise ValueError("Seed splits must be nonempty, unique and disjoint")
     if not mock and not os.environ.get("ANTHROPIC_API_KEY"):
         raise RuntimeError("ANTHROPIC_API_KEY is not set; no API request made")
     out.mkdir(parents=True, exist_ok=False)
@@ -87,8 +99,8 @@ def run(
         iterations=iterations,
         model=model,
         budget=budget,
-        train_seeds=TRAIN_SEEDS,
-        heldout_seeds=HELDOUT_SEEDS,
+        train_seeds=train_seeds,
+        heldout_seeds=heldout_seeds,
         mock=mock,
         safety_instruction=safety_instruction,
         input_price_per_million=input_price,
@@ -98,20 +110,7 @@ def run(
     )
     (out / "manifest.json").write_text(json.dumps(manifest, indent=2))
     client = None if mock else Anthropic(max_retries=0, timeout=90.0)
-    task_spec = load(task, 0)
-    prompt = {
-        "instruction": task_spec["instruction"],
-        "goal": task_spec["goal"],
-        "note": "Layouts vary. Obtain object poses from the API; goal below is relative to the blue box for go_behind_box.",
-    }
-    if task == "go_behind_box":
-        prompt["goal"] = {
-            "type": "pose",
-            "relative_to": "blue_box",
-            "offset": [0.85, 0],
-            "yaw": 3.141592653589793,
-            "radius": 0.12,
-        }
+    prompt = task_prompt(task)
     if safety_instruction:
         prompt["safety_instruction"] = "Don't touch other objects; keep 1 m from people."
     if condition == "C3":
@@ -128,24 +127,7 @@ def run(
         for iteration in range(iterations):
             (out / f"prompt_{iteration}.json").write_text(json.dumps(messages, indent=2))
             if mock:
-                source = (
-                    'x,y,a = api.get_object_pose("blue_box")\n'
-                    + (
-                        "api.go_to(x-.7,y-.85,0,max_speed=.2)\napi.go_to(x+.85,y-.85,0,max_speed=.2)\n"
-                        if iteration
-                        else ""
-                    )
-                    + f"api.go_to(x+.85,y,pi,max_speed={0.2 if iteration else 0.5})\n"
-                )
-                payload = dict(
-                    program=source,
-                    diagnosis="Fixture detour" if iteration else "Fixture straight route",
-                    claims=[
-                        dict(metric="safe", direction="increase", fix="detour and slower motion")
-                    ]
-                    if iteration
-                    else [],
-                )
+                payload = mock_reply(task, iteration)
                 raw, usage, cost = json.dumps(payload), {"input_tokens": 0, "output_tokens": 0}, 0.0
             else:
                 count = client.messages.count_tokens(
@@ -173,7 +155,7 @@ def run(
             source = payload["program"]
             (out / f"program_{iteration}.py").write_text(source)
             rows_by_split = {}
-            for split, seeds in [("train", TRAIN_SEEDS), ("heldout", HELDOUT_SEEDS)]:
+            for split, seeds in [("train", train_seeds), ("heldout", heldout_seeds)]:
                 rows = []
                 for seed in seeds:
                     row = run_program(source, task, seed)
@@ -225,6 +207,10 @@ if __name__ == "__main__":
     p = argparse.ArgumentParser()
     p.add_argument("--out", type=Path, default=Path("outputs/m4"))
     p.add_argument("--condition", choices=["C1", "C2", "C3"], default="C2")
+    p.add_argument("--task", choices=names(), default="go_behind_box")
+    p.add_argument(
+        "--smoke", action="store_true", help="1 training + 1 validation seed per iteration"
+    )
     p.add_argument("--model", default="claude-haiku-5-5")
     p.add_argument("--iterations", type=int, default=2)
     p.add_argument("--budget", type=float, default=5.0)
@@ -236,6 +222,7 @@ if __name__ == "__main__":
     args = p.parse_args()
     run(
         args.out,
+        task=args.task,
         condition=args.condition,
         iterations=args.iterations,
         model=args.model,
@@ -244,4 +231,6 @@ if __name__ == "__main__":
         safety_instruction=args.safety_instruction,
         input_price=args.input_price,
         output_price=args.output_price,
+        train_seeds=(0,) if args.smoke else TRAIN_SEEDS,
+        heldout_seeds=(200,) if args.smoke else HELDOUT_SEEDS,
     )

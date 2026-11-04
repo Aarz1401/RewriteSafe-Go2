@@ -61,3 +61,19 @@ Each iteration saves a complete program, diagnosis and claimed metric changes, t
 - Add stronger process isolation for genuinely adversarial programs; the present AST runner is a research restriction layer.
 - Replace solid table/rack and cylindrical cone proxies when fidelity matters; validate lateral sport-mode tracking on the lab firmware later.
 - Diagnosis direction checks are descriptive, with no causal or significance claim. Hardware ranking comparisons remain future work behind RealBackend.
+
+## 2026-11-04 — follow-up fixes
+
+The user requested addressing the reported problems. This revision retains the November 1 results unchanged and writes new evidence under results/revision-2026-11-04. Seeds 100–119 are now explicitly regression seeds because their failures were inspected; seeds 200–219 are a fresh validation split. Development used seeds 0–2 and an all-task smoke on seed 300; no paid API or hardware calls are authorized or needed for this revision.
+
+2026-11-04: Corridor failures were caused by an inflated obstacle covering the exact goal center even though another point within the goal radius was safe. Keep the original center when clear; otherwise search candidate points inside the permitted region with 4 cm reserved for tracking error. Do not reduce clearance margins to force a route. The three reported failing seeds now pass regression tests.
+
+2026-11-04: Added `get_task_goal()` to the controller API and its AST allowlist. It returns only a fresh copy of public goal metadata and per-episode coordinates, never seeds, verifier history or simulator internals. Behind-box coordinates follow the current box along the original start direction. Prompts describe task semantics and ask programs to query the episode goal; this replaces a training-seed-specific prompt and removes the single-task restriction. The mock remains a deterministic fixture, not a planning harness injected into Anthropic.
+
+2026-11-04: Tower development compared larger stack offsets and contact settings. Offsets of 4.5–5 cm collapsed during idle tests and were rejected. Kept the existing geometry and changed sliding/torsional/rolling friction from [0.6, 0.02, 0.002] to [0.9, 0.001, 0.0001]. On development seeds 0–2 the tower stayed upright for 10 seconds and toppled after naive contact. These are simulator task parameters, not measurements of cardboard friction.
+
+2026-11-04: Exposed the previously hardcoded tracking time constant and validated dynamics settings. Corrected the command queue's extra 10 ms delay. Added a pure offline 100 Hz straight-line fitting tool; a synthetic-data test recovers known latency, acceleration and tracking time constant. Physical calibration remains pending actual lab tracks, and the documentation explicitly separates those facts.
+
+2026-11-04: Added a bounded validation command covering the two changed tasks on regression and fresh seeds, idle tower stability, and two-iteration mock-loop smoke checks for all eight tasks. Original results and their provenance remain an immutable record of the earlier implementation. New source hashes are saved before validation, with no controller/task retuning after observing the fresh split.
+
+2026-11-04 results: 160 regression/fresh-validation episodes, 20 idle tower checks and 32 mock-loop episodes completed. Careful corridor and tower success/safety are 20/20 on both the regression and fresh splits. Naive tower toppling is 20/20 on both splits; all idle towers remain stable. All eight mock loops complete, retaining unsuccessful fixture programs as failures. The test suite has 46 passing tests and API expenditure is $0.00; results/revision-2026-11-04 contains source hashes, raw results and reports. Remaining physical calibration requires lab data, and the mock checks do not establish LLM performance.

@@ -9,6 +9,7 @@ import tempfile
 from pathlib import Path
 
 API_NAMES = {
+    "get_task_goal",
     "get_robot_pose",
     "get_object_pose",
     "get_object_size",

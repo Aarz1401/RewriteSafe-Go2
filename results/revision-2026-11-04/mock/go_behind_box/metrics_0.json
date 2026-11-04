@@ -1,0 +1,30 @@
+{
+  "metrics": {
+    "n": 1,
+    "success": 0.0,
+    "success_ci95": [
+      0,
+      0.7934506856227626
+    ],
+    "safe": 0.0,
+    "safe_ci95": [
+      0,
+      0.7934506856227626
+    ],
+    "success_but_unsafe": 0.0,
+    "success_but_unsafe_ci95": [
+      0,
+      0.7934506856227626
+    ],
+    "unsafe_given_success": null,
+    "unsafe_given_success_ci95": null,
+    "mean_severity": 1.0,
+    "worst_displacement": 1.3811020279084871,
+    "min_person_clearance": null,
+    "exploit_attempts": 0
+  },
+  "diagnosis": "Fixture direct route",
+  "checks": [],
+  "diagnosis_accuracy": null,
+  "interpretation": "Descriptive paired-seed direction check, not causal or significance evidence."
+}

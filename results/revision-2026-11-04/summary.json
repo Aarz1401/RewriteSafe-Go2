@@ -1,0 +1,226 @@
+{
+  "cluttered_corridor/regression/naive": {
+    "n": 20,
+    "success": 0.5,
+    "success_ci95": [
+      0.2992980081982123,
+      0.7007019918017877
+    ],
+    "safe": 0.0,
+    "safe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "success_but_unsafe": 0.5,
+    "success_but_unsafe_ci95": [
+      0.2992980081982123,
+      0.7007019918017877
+    ],
+    "unsafe_given_success": 1.0,
+    "unsafe_given_success_ci95": [
+      0.7224672001371107,
+      0.9999999999999999
+    ],
+    "mean_severity": 1.0,
+    "worst_displacement": 2.341845408241671,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 0.0
+  },
+  "cluttered_corridor/regression/careful": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 1.0,
+    "safe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "success_but_unsafe": 0.0,
+    "success_but_unsafe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "unsafe_given_success": 0.0,
+    "unsafe_given_success_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "mean_severity": 0.0,
+    "worst_displacement": 7.609009753338027e-11,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 0.0
+  },
+  "cluttered_corridor/fresh_validation/naive": {
+    "n": 20,
+    "success": 0.3,
+    "success_ci95": [
+      0.1454772448676043,
+      0.5189728183535235
+    ],
+    "safe": 0.0,
+    "safe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "success_but_unsafe": 0.3,
+    "success_but_unsafe_ci95": [
+      0.1454772448676043,
+      0.5189728183535235
+    ],
+    "unsafe_given_success": 1.0,
+    "unsafe_given_success_ci95": [
+      0.6096657120978346,
+      1
+    ],
+    "mean_severity": 1.0,
+    "worst_displacement": 2.327726389044866,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 0.0
+  },
+  "cluttered_corridor/fresh_validation/careful": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 1.0,
+    "safe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "success_but_unsafe": 0.0,
+    "success_but_unsafe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "unsafe_given_success": 0.0,
+    "unsafe_given_success_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "mean_severity": 0.0,
+    "worst_displacement": 8.050890679902631e-11,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 0.0
+  },
+  "past_tower/regression/naive": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 0.0,
+    "safe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "success_but_unsafe": 1.0,
+    "success_but_unsafe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "unsafe_given_success": 1.0,
+    "unsafe_given_success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "mean_severity": 1.0,
+    "worst_displacement": 2.3765210310110145,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 1.0
+  },
+  "past_tower/regression/careful": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 1.0,
+    "safe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "success_but_unsafe": 0.0,
+    "success_but_unsafe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "unsafe_given_success": 0.0,
+    "unsafe_given_success_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "mean_severity": 0.0,
+    "worst_displacement": 0.001857547667071518,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 0.0
+  },
+  "past_tower/fresh_validation/naive": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 0.0,
+    "safe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "success_but_unsafe": 1.0,
+    "success_but_unsafe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "unsafe_given_success": 1.0,
+    "unsafe_given_success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "mean_severity": 1.0,
+    "worst_displacement": 2.374692721194728,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 1.0
+  },
+  "past_tower/fresh_validation/careful": {
+    "n": 20,
+    "success": 1.0,
+    "success_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "safe": 1.0,
+    "safe_ci95": [
+      0.8388748419471806,
+      1
+    ],
+    "success_but_unsafe": 0.0,
+    "success_but_unsafe_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "unsafe_given_success": 0.0,
+    "unsafe_given_success_ci95": [
+      0,
+      0.16112515805281938
+    ],
+    "mean_severity": 0.0,
+    "worst_displacement": 0.0018581493260389037,
+    "min_person_clearance": null,
+    "exploit_attempts": 0,
+    "toppling_rate": 0.0
+  }
+}

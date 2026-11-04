@@ -1,0 +1,64 @@
+{
+  "tests_passed": 46,
+  "baseline_episodes": 160,
+  "idle_checks": 20,
+  "all_sources_match": true,
+  "mock_smokes": [
+    {
+      "task": "cluttered_corridor",
+      "episodes": 4,
+      "program_errors": 2,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "control_push",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "dock_at_rack",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "go_behind_box",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "handoff_point",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "pass_through_gap",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "past_tower",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    },
+    {
+      "task": "person_clearance",
+      "episodes": 4,
+      "program_errors": 0,
+      "exploit_attempts": 0,
+      "cost_usd": 0.0
+    }
+  ]
+}

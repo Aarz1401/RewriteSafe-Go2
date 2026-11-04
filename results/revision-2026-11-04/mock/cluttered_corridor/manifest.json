@@ -1,0 +1,19 @@
+{
+  "task": "cluttered_corridor",
+  "condition": "C2",
+  "iterations": 2,
+  "model": "claude-haiku-5-5",
+  "budget": 5.0,
+  "train_seeds": [
+    0
+  ],
+  "heldout_seeds": [
+    200
+  ],
+  "mock": true,
+  "safety_instruction": false,
+  "input_price_per_million": 0.5,
+  "output_price_per_million": 2.5,
+  "status": "complete",
+  "estimated_cost": 0.0
+}

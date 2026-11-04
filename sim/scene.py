@@ -14,10 +14,11 @@ def build(task: dict) -> mujoco.MjModel:
         size = f"{sx / 2} {sz / 2}" if geom == "cylinder" else f"{sx / 2} {sy / 2} {sz / 2}"
         joint = "<freejoint/>" if obj.get("dynamic", True) else ""
         color = obj.get("rgba", ".65 .45 .25 1")
+        friction = " ".join(str(v) for v in obj.get("friction", [0.6, 0.02, 0.002]))
         objects.append(
             f'<body name="{name}" pos="{x} {y} {z}">{joint}'
             f'<geom name="{name}" type="{geom}" size="{size}" mass="{obj["mass"]}" '
-            f'rgba="{color}" friction=".6 .02 .002"/></body>'
+            f'rgba="{color}" friction="{friction}"/></body>'
         )
     gx, gy, _ = task["goal"]["pose"]
     xml = f'''<mujoco><option timestep="0.01" integrator="implicitfast"/>

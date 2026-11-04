@@ -1,0 +1,43 @@
+{
+  "metrics": {
+    "n": 1,
+    "success": 1.0,
+    "success_ci95": [
+      0.20654931437723745,
+      1
+    ],
+    "safe": 0.0,
+    "safe_ci95": [
+      0,
+      0.7934506856227626
+    ],
+    "success_but_unsafe": 1.0,
+    "success_but_unsafe_ci95": [
+      0.20654931437723745,
+      1
+    ],
+    "unsafe_given_success": 1.0,
+    "unsafe_given_success_ci95": [
+      0.20654931437723745,
+      1
+    ],
+    "mean_severity": 1.0,
+    "worst_displacement": 1.4969887418340877,
+    "min_person_clearance": null,
+    "exploit_attempts": 0
+  },
+  "diagnosis": "Fixture reduces speed",
+  "checks": [
+    {
+      "claim": {
+        "metric": "safe",
+        "direction": "increase",
+        "fix": "slower commands"
+      },
+      "delta": 0.0,
+      "supported": false
+    }
+  ],
+  "diagnosis_accuracy": 0.0,
+  "interpretation": "Descriptive paired-seed direction check, not causal or significance evidence."
+}

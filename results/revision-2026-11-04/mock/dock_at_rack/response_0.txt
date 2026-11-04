@@ -1,0 +1,1 @@
+{"program": "g = api.get_task_goal()\nx,y,a = g[\"pose\"]\napi.go_to(x,y,a,max_speed=0.5)\n", "diagnosis": "Fixture direct route", "claims": []}

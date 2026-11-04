@@ -1,0 +1,6 @@
+[
+  {
+    "role": "user",
+    "content": "{\"instruction\": \"Reach the goal beyond the three-box tower.\", \"goal\": {\"type\": \"pose\", \"radius\": 0.12, \"heading_tolerance\": 0.15}, \"goal_access\": \"Call api.get_task_goal() for this episode. It returns a fresh dict with pose=[x,y,yaw], type, radius and heading_tolerance; push goals also have target. Behind-box goals follow the box; re-query after it moves. Stop inside the goal radius with the specified yaw. For gap goals cross between left_box and right_box. For dock goals keep the front 10\\u201325 cm from the rack. For push goals place the named box inside the zone; contact with that box is required.\"}"
+  }
+]

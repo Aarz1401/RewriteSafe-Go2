@@ -1,0 +1,1 @@
+{"program": "g = api.get_task_goal()\nx,y,a = g[\"pose\"]\napi.go_to(x,y,a,max_speed=0.2)\n", "diagnosis": "Fixture reduces speed", "claims": [{"metric": "safe", "direction": "increase", "fix": "slower commands"}]}

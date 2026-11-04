@@ -6,6 +6,7 @@ import mujoco
 import numpy as np
 
 from sim.scene import build
+from tasks.goals import resolve_goal
 from verifier.core import Verifier
 
 
@@ -16,7 +17,18 @@ class SimConfig:
     acceleration: float = 0.8
     latency: float = 0.06
     noise: float = 0.003
+    tracking_tau: float = 0.08
     max_seconds: float = 90.0
+
+    def __post_init__(self) -> None:
+        for name in ("speed_cap", "acceleration", "tracking_tau", "max_seconds"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or value <= 0:
+                raise ValueError(f"{name} must be finite and positive")
+        for name in ("latency", "noise"):
+            value = getattr(self, name)
+            if not math.isfinite(value) or value < 0:
+                raise ValueError(f"{name} must be finite and nonnegative")
 
 
 class SimBackend:
@@ -27,7 +39,7 @@ class SimBackend:
         self._data.qpos[:3] = task["start"]
         self._rng = np.random.default_rng(task["seed"])
         self._command = np.zeros(3)
-        self._queue = deque([np.zeros(3) for _ in range(round(self.config.latency / 0.01) + 1)])
+        self._queue = deque([np.zeros(3) for _ in range(round(self.config.latency / 0.01))])
         self._renderer = None
         self.frames: list = []
         self.video = video
@@ -41,6 +53,9 @@ class SimBackend:
 
     def get_robot_pose(self) -> tuple[float, float, float]:
         return tuple(float(v) for v in self._data.qpos[:3])
+
+    def get_task_goal(self) -> dict:
+        return resolve_goal(self.task, self.verifier.initial, self.snapshot()["objects"])
 
     def get_object_pose(self, name: str) -> tuple[float, float, float]:
         body = self._data.body(name)
@@ -79,7 +94,7 @@ class SimBackend:
         if np.linalg.norm(cmd) > 0:
             desired[:2] += self._rng.normal(0, self.config.noise, 2)
         desired[:2] *= min(1, self.config.speed_cap / max(np.linalg.norm(desired[:2]), 1e-9))
-        accel = (desired[:2] - self._data.qvel[:2]) / 0.08
+        accel = (desired[:2] - self._data.qvel[:2]) / self.config.tracking_tau
         accel *= min(1, self.config.acceleration / max(np.linalg.norm(accel), 1e-9))
         self._data.qfrc_applied[:2] = 18 * accel
         self._data.qfrc_applied[2] = np.clip((desired[2] - self._data.qvel[2]) * 8, -4, 4)
